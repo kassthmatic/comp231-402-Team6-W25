@@ -1,0 +1,8 @@
+# Ignore node_modules in all subdirectories
+**/node_modules/
+
+# Ignore environment files
+**/.env
+
+# Ignore build files
+filament-vault-frontend/dist/
