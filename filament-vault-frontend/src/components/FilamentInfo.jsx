@@ -2,18 +2,37 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import "../index.css";
+import StarRating from "../components/StarRating";
+import ReviewForm from "../components/ReviewForm";
+
 
 const FilamentInfo = () => {
   const { id } = useParams();
   const [filament, setFilament] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [reviews, setReviews] = useState([]); 
+  const [averageRating, setAverageRating] = useState(0);
+
+    const handleNewReview = (newReview) => {
+    setReviews([...reviews, newReview]); 
+  
+    const newAverage = ([...reviews, newReview].reduce((sum, r) => sum + r.rating, 0) / ([...reviews, newReview].length)).toFixed(1);
+    setAverageRating(newAverage);
+  };
 
   useEffect(() => {
     const fetchFilament = async () => {
       try {
         const response = await axios.get(`http://localhost:5000/api/filaments/${id}`);
         setFilament(response.data);
+        
+        if (response.data.reviews) {
+          setReviews(response.data.reviews);
+          const avg = response.data.reviews.reduce((sum, r) => sum + r.rating, 0) / response.data.reviews.length;
+          setAverageRating(avg.toFixed(1)); 
+        }
+  
         setLoading(false);
       } catch (error) {
         console.error("Error fetching filament:", error);
@@ -21,9 +40,9 @@ const FilamentInfo = () => {
         setLoading(false);
       }
     };
-
+  
     fetchFilament();
-  }, [id]);
+  }, [id]);  
 
   if (loading) return <p className="loading-message">Loading filament information...</p>;
   if (error) return <p className="error-message">{error}</p>;
@@ -71,7 +90,32 @@ const FilamentInfo = () => {
       </div>
 
       <div className="filament-actions">
-        
+      <div className="filament-reviews">
+  <h2>Customer Reviews</h2>
+
+  {/* Display average rating */}
+  <div>
+    <strong>Average Rating:</strong> <StarRating rating={Math.round(averageRating)} />
+    <p>{averageRating} out of 5</p>
+  </div>
+
+  {/* List of existing reviews */}
+  {reviews.length > 0 ? (
+    <ul>
+      {reviews.map((review, index) => (
+        <li key={index}>
+          <StarRating rating={review.rating} />
+          <p>{review.review}</p>
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p>No reviews yet. Be the first to review this filament!</p>
+  )}
+
+  {/* Review submission form */}
+  <ReviewForm onSubmit={handleNewReview} />
+</div>        
         <button className="back-button" onClick={() => window.history.back()}>
           Back
         </button>
