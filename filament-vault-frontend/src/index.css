@@ -102,7 +102,7 @@ body {
 /* Image styling */
 .filament-image {
   width: 100%;
-  height:
+  
 }
 
 /* Footer */
@@ -128,4 +128,79 @@ body {
   font-size: 16px;
   border-radius: 5px;
   border: 1px solid #ccc;
+}
+
+
+
+/* Filament Info Page Styles */
+.filament-info-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.filament-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.filament-detail-image {
+  max-width: 300px;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.filament-info-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+}
+
+.filament-info-table th,
+.filament-info-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.filament-info-table th {
+  background-color: #333;
+  color: white;
+  width: 200px;
+}
+
+.filament-info-table tr:hover {
+  background-color: #444;
+}
+
+.filament-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.review-button, .back-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.review-button {
+  background-color: #4caf50;
+  color: white;
+}
+
+.back-button {
+  background-color: #555;
+  color: white;
+}
+
+.error-message, .loading-message {
+  text-align: center;
+  padding: 20px;
+  font-size: 18px;
 }
