@@ -36,4 +36,22 @@ router.get('/recently-added', async (req, res) => {
   }
 });
 
+
+
+// Get filament by ID
+router.get("/:id", async (req, res) => {
+  try {
+    const filament = await Filament.findById(req.params.id);
+    if (!filament) {
+      return res.status(404).json({ message: "Filament not found" });
+    }
+    res.json(filament);
+  } catch (error) {
+    console.error("Error fetching filament:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
+
+
 module.exports = router;
