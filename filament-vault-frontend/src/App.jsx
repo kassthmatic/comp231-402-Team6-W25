@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import FilamentInfo from "./components/FilamentInfo";
+import Register from "./pages/Register";
 import logo from './assets/FilamentVaultLogo.jpg';
 import "./index.css";
 
@@ -21,11 +22,17 @@ function App() {
             <li><a href="/about">About</a></li>
             <li><a href="/contact">Contact</a></li>
           </ul>
-          {/* Login/Register Button */}
+
+          {/* Login/Register Buttons */}
           <div className="auth-buttons">
-            <button className="login-button">Login/Register</button>
+          <button className="login-button" onClick={() => window.location.href = "/login"}>
+            Login
+          </button>
+         <button className="register-button" onClick={() => window.location.href = "/register"}>
+          Register
+          </button>
           </div>
-        </nav>
+          </nav>
 
         {/* Search Bar */}
         <div className="search-bar">
@@ -37,6 +44,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/filament/:id" element={<FilamentInfo />} />
+            <Route path="/register" element={<Register />} />
+            {/* Login Route to be added here */}
           </Routes>
         </div>
       </div>
@@ -45,3 +54,5 @@ function App() {
 }
 
 export default App;
+
+
