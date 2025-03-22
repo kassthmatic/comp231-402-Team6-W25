@@ -1,34 +1,41 @@
 import React, { useState } from 'react';
 
-const Register = () => {  
+const Register = () => {
   const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
+  const [email, setEmail]       = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); 
-    if (username && email && password) { 
-      try {
-        const response = await fetch('http://localhost:5000/api/auth/register', { 
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, email, password }),
-        });
+    e.preventDefault();
 
-        const data = await response.json();
-
-        if (response.ok) {
-          alert('Registration successful!');
-          window.location.href = '/';
-        } else {
-          alert(`Error: ${data.message}`);
-        }
-      } catch (error) {
-        console.error('Error during registration:', error);
-        alert('Registration failed. Please try again.');
-      }
-    } else {
+    if (!username || !email || !password) {
       alert('Please fill out all fields.');
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Save token to localStorage (or sessionStorage)
+        localStorage.setItem('token', data.token); // or sessionStorage.setItem
+
+        alert('Registration successful!');
+        window.location.href = '/'; // to homepage after registration is successsful
+      } else {
+        alert(`Error: ${data.message}`);
+      }
+    } catch (error) {
+      console.error('Registration error:', error);
+      alert('Something went wrong. Try again.');
     }
   };
 
@@ -51,4 +58,5 @@ const Register = () => {
   );
 };
 
-export default Register; 
+export default Register;
+
