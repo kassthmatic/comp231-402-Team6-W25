@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import StarRating from './StarRating'; 
 
-const ReviewForm = ({ onSubmit }) => {
+const ReviewForm = ({ filamentId, onSubmit }) => {
   const [reviewText, setReviewText] = useState('');
   const [rating, setRating] = useState(0); 
 
@@ -13,18 +13,42 @@ const ReviewForm = ({ onSubmit }) => {
     setRating(newRating); 
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (reviewText && rating > 0) {
+      const token = localStorage.getItem('token'); // Get token from localStorage
+  
       const newReview = {
         review: reviewText,
         rating,
       };
-      onSubmit(newReview); 
-      setReviewText('');
-      setRating(0); 
+  
+      try {
+        const response = await fetch(`http://localhost:5000/api/filaments/${filamentId}/reviews`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`, // JWT Send token here
+          },
+          body: JSON.stringify(newReview),
+        });
+  
+        const data = await response.json();
+  
+        if (response.ok) {
+          onSubmit(newReview); 
+          setReviewText('');
+          setRating(0);
+          alert('Review submitted!');
+        } else {
+          alert(`Error: ${data.message}`);
+        }
+      } catch (error) {
+        console.error('Error submitting review:', error);
+        alert('Failed to submit review.');
+      }
     }
-  };
+  };  
 
   return (
     <form onSubmit={handleSubmit}>
