@@ -1,7 +1,11 @@
+require('dotenv').config();
+console.log('JWT_SECRET:', process.env.JWT_SECRET); //can remove before uploading to GitHub
+
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const filamentsRouter = require("./routes/filaments");
+const authRouter = require("./routes/auth"); 
 
 const app = express();
 
@@ -17,7 +21,9 @@ mongoose
 
 // Routes
 app.use("/api/filaments", filamentsRouter);  // This should be registered correctly
+app.use("/api/auth", authRouter);
 
 // Start the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
