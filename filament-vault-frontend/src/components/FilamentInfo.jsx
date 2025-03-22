@@ -114,7 +114,7 @@ const FilamentInfo = () => {
   )}
 
   {/* Review submission form */}
-  <ReviewForm onSubmit={handleNewReview} />
+  <ReviewForm filamentId={id} onSubmit={handleNewReview} />
 </div>        
         <button className="back-button" onClick={() => window.history.back()}>
           Back
