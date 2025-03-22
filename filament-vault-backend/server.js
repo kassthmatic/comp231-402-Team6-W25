@@ -1,5 +1,5 @@
 require('dotenv').config();
-console.log('JWT_SECRET:', process.env.JWT_SECRET); //can remove before uploading to GitHub
+console.log('JWT_SECRET:', process.env.JWT_SECRET); //to see any errors with JWT 
 
 const express = require("express");
 const mongoose = require("mongoose");
