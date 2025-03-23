@@ -1,6 +1,7 @@
-//middleware code to verify the token
-
 const jwt = require('jsonwebtoken');
+
+// Hardcoded JWT Secret
+const JWT_SECRET = 'supersecret_dont_share';
 
 const verifyToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];

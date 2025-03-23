@@ -31,6 +31,6 @@ module.exports = (req, res, next) => {
         res.status(500).json({ error: 'User not found' });
       });
 
-      console.log('Authorization header:', req.headers.authorization);
+      //console.log('Authorization header:', req.headers.authorization);
   });
 };
