@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   // Handle login
   const handleLogin = async (e) => {
@@ -30,7 +32,7 @@ const Login = () => {
 
       if (response.ok) {
         localStorage.setItem('token', data.token); // Store token
-        window.location.href = '/profile'; // Redirect to profile page
+        navigate('/'); // Redirect to home page after login
       } else {
         setError(data.error || 'Login failed. Please try again.');
       }

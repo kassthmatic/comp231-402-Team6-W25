@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Home from "./components/Home";
 import FilamentInfo from "./components/FilamentInfo";
 import Register from "./pages/Register";
+import Login from "./pages/Login";
 import logo from './assets/FilamentVaultLogo.jpg';
 import "./index.css";
 
@@ -13,6 +14,9 @@ function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [allFilaments, setAllFilaments] = useState([]);
   const [filteredFilaments, setFilteredFilaments] = useState([]);
+
+  const token = localStorage.getItem('token');
+  const isLoggedIn = token ? true : false;
 
   useEffect(() => {
     axios.get("http://localhost:5000/api/filaments")
@@ -30,6 +34,16 @@ function App() {
       setFilteredFilaments(results);
     }
   }, [searchTerm, allFilaments]);
+
+  const handleLoginLogout = () => {
+    if (isLoggedIn) {
+      // Remove token (Logout)
+      localStorage.removeItem('token');
+      window.location.href = "/";  // Redirect to home page
+    } else {
+      window.location.href = "/login";  // Redirect to login page
+    }
+  };
 
   return (
     <BrowserRouter>
@@ -49,12 +63,20 @@ function App() {
 
           {/* Login/Register Buttons */}
           <div className="auth-buttons">
-          <button className="login-button" onClick={() => window.location.href = "/login"}>
-            Login
-          </button>
-         <button className="register-button" onClick={() => window.location.href = "/register"}>
-          Register
-          </button>
+            <button 
+              className="login-button" 
+              onClick={handleLoginLogout}
+            >
+              {isLoggedIn ? "Logout" : "Login"}
+            </button>
+            {!isLoggedIn && (
+              <button 
+                className="register-button" 
+                onClick={() => window.location.href = "/register"}
+              >
+                Register
+              </button>
+            )}
           </div>
           </nav>
 
@@ -92,7 +114,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/filament/:id" element={<FilamentInfo />} />
             <Route path="/register" element={<Register />} />
-            {/* Login Route to be added here */}
+            <Route path="/login" element={<Login />} />
           </Routes>
         </div>
       </div>
