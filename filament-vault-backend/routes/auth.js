@@ -17,6 +17,9 @@ router.post('/register', async (req, res) => {
     }
 
     // Hash the password
+    console.log("REQ.BODY:", req.body);
+    console.log("password value:", password);
+////////////////////////////////////////////////
     const hashedPassword = await bcrypt.hash(password, 10);
 
     console.log('Hashed password during registration:', hashedPassword); // Log the hashed password
@@ -25,11 +28,12 @@ router.post('/register', async (req, res) => {
     await newUser.save();
 
     // JWT token so the user stays logged in after registering or logging in
+    //Updated register route to match login route
     const token = jwt.sign(
-      { userId: newUser._id, username: newUser.username },
-      JWT_SECRET,  // Hardcoded JWT_SECRET
+      { _id: newUser._id, username: newUser.username },
+      JWT_SECRET,
       { expiresIn: '1h' }
-    );
+    );    
 
     res.status(201).json({ message: 'User registered successfully!', token });
   } catch (error) {

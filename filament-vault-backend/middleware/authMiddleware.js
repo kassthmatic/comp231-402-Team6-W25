@@ -24,8 +24,8 @@ module.exports = (req, res, next) => {
     // Find the user by ID and attach user data to request
     User.findById(_id)
       .then((userdata) => {
-        req.user = userdata; // Attach user data to the request object
-        next(); // Proceed to the next route handler
+        req.user = userdata;
+        next(); 
       })
       .catch((err) => {
         res.status(500).json({ error: 'User not found' });
