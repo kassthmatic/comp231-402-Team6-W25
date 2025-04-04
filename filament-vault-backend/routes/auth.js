@@ -4,11 +4,20 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const router = express.Router();
 
+//Function to check that password has 8 characters
+function isStrongPassword(password) {
+  return password.length >= 8;
+}
+
 // Hardcoded JWT Secret
 const JWT_SECRET = 'supersecret_dont_share';
 
 router.post('/register', async (req, res) => {
   const { username, email, password } = req.body;
+  if (!isStrongPassword(password)) {
+    return res.status(400).json({ error: "Password must be at least 8 characters." });
+  }
+
 
   try {
     const existingUser = await User.findOne({ email });
@@ -19,13 +28,14 @@ router.post('/register', async (req, res) => {
     // Hash the password
     console.log("REQ.BODY:", req.body);
     console.log("password value:", password);
-////////////////////////////////////////////////
     const hashedPassword = await bcrypt.hash(password, 10);
 
     console.log('Hashed password during registration:', hashedPassword); // Log the hashed password
 
-    const newUser = new User({ username, email, password });
+    console.log("Will save user with hashed password:", hashedPassword);
+    const newUser = new User({ username, email, password: hashedPassword });
     await newUser.save();
+    
 
     // JWT token so the user stays logged in after registering or logging in
     //Updated register route to match login route
