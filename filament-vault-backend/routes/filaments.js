@@ -38,6 +38,33 @@ router.get('/recently-added', async (req, res) => {
   }
 });
 
+// Filter filaments by material
+router.get("/filter", async (req, res) => {
+  const { material } = req.query;
+
+  
+  if (!material) {
+    return res.status(400).json({ message: "Material query parameter is required." });
+  }
+
+  try {
+    // Use $regex for case-insensitive matching of material
+    const filteredFilaments = await Filament.find({
+      material: { $regex: material, $options: "i" }
+    });
+
+    if (filteredFilaments.length === 0) {
+      return res.status(404).json({ message: `No filaments found for material: ${material}` });
+    }
+
+    res.json(filteredFilaments);
+  } catch (error) {
+    console.error("Error fetching filtered filaments:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
+
 // Get filament by ID
 router.get("/:id", async (req, res) => {
   try {
