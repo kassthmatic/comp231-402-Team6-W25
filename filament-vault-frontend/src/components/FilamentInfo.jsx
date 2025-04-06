@@ -13,12 +13,48 @@ const FilamentInfo = () => {
   const [error, setError] = useState(null);
   const [reviews, setReviews] = useState([]); 
   const [averageRating, setAverageRating] = useState(0);
+  const [isAdmin, setIsAdmin] = useState(false);
 
     const handleNewReview = (newReview) => {
     setReviews([...reviews, newReview]); 
   
     const newAverage = ([...reviews, newReview].reduce((sum, r) => sum + r.rating, 0) / ([...reviews, newReview].length)).toFixed(1);
     setAverageRating(newAverage);
+  };
+
+
+   // Function to handle deletion of a review
+   const handleDeleteReview = async (reviewId, index) => {
+    try {
+      const token = localStorage.getItem('token');
+      
+      
+      const response = await axios.delete(`http://localhost:5000/api/filaments/${id}/reviews/${reviewId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (response.status === 200) {
+        
+        const updatedReviews = [...reviews];
+        updatedReviews.splice(index, 1);
+        setReviews(updatedReviews);
+        
+        // Recalculate average rating
+        if (updatedReviews.length > 0) {
+          const newAverage = (updatedReviews.reduce((sum, r) => sum + r.rating, 0) / updatedReviews.length).toFixed(1);
+          setAverageRating(newAverage);
+        } else {
+          setAverageRating(0);
+        }
+        
+        alert('Review deleted successfully');
+      }
+    } catch (error) {
+      console.error('Error deleting review:', error);
+      alert('Failed to delete review');
+    }
   };
 
   useEffect(() => {
@@ -40,8 +76,36 @@ const FilamentInfo = () => {
         setLoading(false);
       }
     };
+
+    // Check if user is admin
+    const checkAdminStatus = async () => {
+      const token = localStorage.getItem('token');
+      
+      if (token) {
+        try {
+          
+          const tokenData = JSON.parse(atob(token.split('.')[1]));
+          
+          
+          if (!tokenData.role) {
+            const userResponse = await axios.get('http://localhost:5000/api/profile', {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            });
+            
+            setIsAdmin(userResponse.data.user.role === 'admin');
+          } else {
+            setIsAdmin(tokenData.role === 'admin');
+          }
+        } catch (error) {
+          console.error("Error checking admin status:", error);
+        }
+      }
+    };
   
     fetchFilament();
+    checkAdminStatus();
   }, [id]);  
 
   if (loading) return <p className="loading-message">Loading filament information...</p>;
@@ -87,7 +151,7 @@ const FilamentInfo = () => {
             <tr>
               <th>Purchase Here</th>
               <td><a 
-      href="https://ca.elegoo.com/products/rapid-petg-filament-1-75mm-colored-1kg?gad_source=1&gclid=Cj0KCQjwqcO_BhDaARIsACz62vPEjUhjmvOYv9T4XLI-pCITOVeZp_HDRty2YZwhZicnV9U6z2HjLaEaAnobEALw_wcB"
+      href={filament.purchase_from}
       target="_blank" 
       rel="noopener noreferrer">
         {filament.purchase_from}</a> </td>
@@ -109,17 +173,28 @@ const FilamentInfo = () => {
 
   {/* List of existing reviews */}
   {reviews.length > 0 ? (
-    <ul>
-      {reviews.map((review, index) => (
-        <li key={index}>
-          <StarRating rating={review.rating} />
-          <p>{review.review}</p>
-        </li>
-      ))}
-    </ul>
-  ) : (
-    <p>No reviews yet. Be the first to review this filament!</p>
-  )}
+            <ul className="review-list">
+              {reviews.map((review, index) => (
+                <li key={index} className="review-item">
+                  <div className="review-content">
+                    <StarRating rating={review.rating} />
+                    <p>{review.review}</p>
+                  </div>
+                  {/* Only show delete button if user is admin */}
+                  {isAdmin && (
+                    <button 
+                      className="delete-review-button" 
+                      onClick={() => handleDeleteReview(review._id, index)}
+                    >
+                      Delete
+                    </button>
+                  )}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No reviews yet. Be the first to review this filament!</p>
+          )}
 
   {/* Review submission form */}
   <ReviewForm filamentId={id} onSubmit={handleNewReview} />
