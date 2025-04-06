@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import '../index.css';
 import logo from '../assets/FilamentVaultLogo.jpg';
+import MaterialFilter from "./MaterialFilter";
 
 const Home = () => {
   const [topRatedFilaments, setTopRatedFilaments] = useState([]);
@@ -40,6 +41,8 @@ const Home = () => {
       <div className="logo-container">
           <img src={logo} alt="Filament Vault Logo" className="logo" />
       </div>
+
+      <MaterialFilter />
 
       {/* Main Content */}
       <div className="main-content">
