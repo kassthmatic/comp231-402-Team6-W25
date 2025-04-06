@@ -3,6 +3,7 @@ import axios from "axios";
 import '../index.css';
 import logo from '../assets/FilamentVaultLogo.jpg';
 import MaterialFilter from "./MaterialFilter";
+import { Link } from 'react-router-dom';
 
 const Home = () => {
   const [topRatedFilaments, setTopRatedFilaments] = useState([]);
@@ -106,7 +107,9 @@ const Home = () => {
 
         {/* FAQ Button */}
         <div className="faq-button">
-          <button className="faq-btn">FAQ</button>
+          <Link to="/faq">
+            <button className="faq-btn">FAQ</button>
+          </Link>
         </div>
 
         {/* Help/Leave Feedback Button */}
