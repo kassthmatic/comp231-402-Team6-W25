@@ -7,6 +7,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import logo from './assets/FilamentVaultLogo.jpg';
 import "./index.css";
+import FAQ from './pages/FAQ';
 
 function App() {
 
@@ -115,6 +116,7 @@ function App() {
             <Route path="/filament/:id" element={<FilamentInfo />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/faq" element={<FAQ />} />
           </Routes>
         </div>
       </div>
