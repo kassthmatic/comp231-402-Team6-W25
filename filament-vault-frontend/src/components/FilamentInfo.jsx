@@ -84,6 +84,14 @@ const FilamentInfo = () => {
               <th>Enclosure Required</th>
               <td>{filament.enclosure_required}</td>
             </tr>
+            <tr>
+              <th>Purchase Here</th>
+              <td><a 
+      href="https://ca.elegoo.com/products/rapid-petg-filament-1-75mm-colored-1kg?gad_source=1&gclid=Cj0KCQjwqcO_BhDaARIsACz62vPEjUhjmvOYv9T4XLI-pCITOVeZp_HDRty2YZwhZicnV9U6z2HjLaEaAnobEALw_wcB"
+      target="_blank" 
+      rel="noopener noreferrer">
+        {filament.purchase_from}</a> </td>
+            </tr>
             
           </tbody>
         </table>
