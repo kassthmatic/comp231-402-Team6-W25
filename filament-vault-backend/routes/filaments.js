@@ -1,6 +1,7 @@
 const express = require("express");
 const Filament = require("../models/Filament");
 const verifyToken = require('../middleware/verifyToken');
+const User = require('../models/User');
 
 
 const router = express.Router();
@@ -103,6 +104,46 @@ router.post('/:id/reviews', verifyToken, async (req, res) => {
   } catch (error) {
     console.error('Error adding review:', error);
     res.status(500).json({ message: 'Server error while adding review' });
+  }
+});
+
+// Delete a review (admin only)
+router.delete('/:id/reviews/:reviewId', verifyToken, async (req, res) => {
+  try {
+    
+    const filament = await Filament.findById(req.params.id);
+    if (!filament) {
+      return res.status(404).json({ message: 'Filament not found' });
+    }
+
+    
+    const user = await User.findById(req.user.userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    
+    if (user.role !== 'admin') {
+      return res.status(403).json({ message: 'Not authorized. Admin access required.' });
+    }
+
+    
+    const reviewIndex = filament.reviews.findIndex(
+      (review) => review._id.toString() === req.params.reviewId
+    );
+
+    if (reviewIndex === -1) {
+      return res.status(404).json({ message: 'Review not found' });
+    }
+
+    
+    filament.reviews.splice(reviewIndex, 1);
+    await filament.save();
+
+    res.json({ message: 'Review deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting review:', error);
+    res.status(500).json({ message: 'Server error while deleting review' });
   }
 });
 
