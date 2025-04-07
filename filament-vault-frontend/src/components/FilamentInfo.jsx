@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { FaHeart } from 'react-icons/fa';
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import "../index.css";
+import FilamentCard from './FilamentCard';
 import StarRating from "../components/StarRating";
 import ReviewForm from "../components/ReviewForm";
 
@@ -133,3 +135,4 @@ const FilamentInfo = () => {
 };
 
 export default FilamentInfo;
+

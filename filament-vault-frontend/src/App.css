@@ -40,3 +40,12 @@
 .read-the-docs {
   color: #888;
 }
+
+.filament-card {
+  position: relative;
+}
+
+.filament-card svg:hover {
+  transform: scale(1.1);
+  transition: 0.2s ease-in-out;
+}

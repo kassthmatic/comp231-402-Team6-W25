@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { Link } from 'react-router-dom';
 import axios from "axios";
+import About from './pages/About';
+import Help from './pages/Help'
 import Home from "./components/Home";
 import FilamentInfo from "./components/FilamentInfo";
 import Register from "./pages/Register";
@@ -37,9 +40,9 @@ function App() {
             </a>
           </div>
           <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/about">About</a></li>
-            <li><a href="/contact">Contact</a></li>
+          <li><Link to="/">Home</Link></li>
+          <li><Link to="/about">About</Link></li>
+          <li><Link to="/help">Contact</Link></li>
           </ul>
 
           {/* Login/Register Buttons */}
@@ -66,14 +69,16 @@ function App() {
 
         {/* Main Content */}
         <div className="main-content">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/filament/:id" element={<FilamentInfo />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/compare" element={<Compare />} />
-          </Routes>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/help" element={<Help />} />
+          <Route path="/filament/:id" element={<FilamentInfo />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/compare" element={<Compare />} />
+        </Routes>
         </div>
       </div>
     </BrowserRouter>

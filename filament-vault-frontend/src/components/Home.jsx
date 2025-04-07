@@ -114,7 +114,9 @@ const Home = () => {
 
         {/* Help/Leave Feedback Button */}
         <div className="feedback-button">
+        <Link to="/help">
           <button className="feedback-btn">Help/Leave Feedback</button>
+        </Link>
         </div>
 
         {/* Footer */}

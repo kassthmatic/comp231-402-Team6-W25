@@ -5,7 +5,8 @@ const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  role: {type: String},
+  role: { type: String },
+  savedFilaments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Filament' }] // 👈 move this here
 });
 
 userSchema.pre('save', async function (next) {
@@ -16,4 +17,4 @@ userSchema.pre('save', async function (next) {
 });
 
 const User = mongoose.model('User', userSchema);
-module.exports = User;  
+module.exports = User;
