@@ -98,6 +98,10 @@ router.put('/update-email', authMiddleware, async (req, res) => {
     return res.status(400).json({ error: 'New email is required' });
   }
 
+  if (!newEmail.includes("@") || !newEmail.includes(".")) {
+    return res.status(400).json({ error: 'Please enter a valid email address.' });
+  }
+
   try {
     const existingEmail = await User.findOne({ email: newEmail });
     if (existingEmail && existingEmail._id.toString() !== req.user._id.toString()) {
