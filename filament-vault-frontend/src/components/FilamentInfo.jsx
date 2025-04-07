@@ -1,61 +1,80 @@
 import React, { useState, useEffect } from "react";
-import { FaHeart } from 'react-icons/fa';
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { FaHeart } from "react-icons/fa";
 import "../index.css";
-import FilamentCard from './FilamentCard';
 import StarRating from "../components/StarRating";
 import ReviewForm from "../components/ReviewForm";
-
 
 const FilamentInfo = () => {
   const { id } = useParams();
   const [filament, setFilament] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [reviews, setReviews] = useState([]); 
+  const [reviews, setReviews] = useState([]);
   const [averageRating, setAverageRating] = useState(0);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
 
-    const handleNewReview = (newReview) => {
-    setReviews([...reviews, newReview]); 
-  
-    const newAverage = ([...reviews, newReview].reduce((sum, r) => sum + r.rating, 0) / ([...reviews, newReview].length)).toFixed(1);
+  const handleNewReview = (newReview) => {
+    const updatedReviews = [...reviews, newReview];
+    setReviews(updatedReviews);
+    const newAverage = (
+      updatedReviews.reduce((sum, r) => sum + r.rating, 0) / updatedReviews.length
+    ).toFixed(1);
     setAverageRating(newAverage);
   };
 
-
-   // Function to handle deletion of a review
-   const handleDeleteReview = async (reviewId, index) => {
+  const handleDeleteReview = async (reviewId, index) => {
     try {
-      const token = localStorage.getItem('token');
-      
-      
-      const response = await axios.delete(`http://localhost:5000/api/filaments/${id}/reviews/${reviewId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
+      const token = localStorage.getItem("token");
+      const response = await axios.delete(
+        `http://localhost:5000/api/filaments/${id}/reviews/${reviewId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      });
+      );
 
       if (response.status === 200) {
-        
         const updatedReviews = [...reviews];
         updatedReviews.splice(index, 1);
         setReviews(updatedReviews);
-        
-        // Recalculate average rating
         if (updatedReviews.length > 0) {
-          const newAverage = (updatedReviews.reduce((sum, r) => sum + r.rating, 0) / updatedReviews.length).toFixed(1);
+          const newAverage = (
+            updatedReviews.reduce((sum, r) => sum + r.rating, 0) / updatedReviews.length
+          ).toFixed(1);
           setAverageRating(newAverage);
         } else {
           setAverageRating(0);
         }
-        
-        alert('Review deleted successfully');
+        alert("Review deleted successfully");
       }
     } catch (error) {
-      console.error('Error deleting review:', error);
-      alert('Failed to delete review');
+      console.error("Error deleting review:", error);
+      alert("Failed to delete review");
+    }
+  };
+
+  const toggleSave = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    try {
+      if (isSaved) {
+        await axios.delete(`http://localhost:5000/api/users/unsave-filament/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setIsSaved(false);
+      } else {
+        await axios.post(`http://localhost:5000/api/users/save-filament/${id}`, {}, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setIsSaved(true);
+      }
+    } catch (err) {
+      console.error("Error toggling save:", err);
     }
   };
 
@@ -64,13 +83,13 @@ const FilamentInfo = () => {
       try {
         const response = await axios.get(`http://localhost:5000/api/filaments/${id}`);
         setFilament(response.data);
-        
         if (response.data.reviews) {
           setReviews(response.data.reviews);
-          const avg = response.data.reviews.reduce((sum, r) => sum + r.rating, 0) / response.data.reviews.length;
-          setAverageRating(avg.toFixed(1)); 
+          const avg =
+            response.data.reviews.reduce((sum, r) => sum + r.rating, 0) /
+            response.data.reviews.length;
+          setAverageRating(avg.toFixed(1));
         }
-  
         setLoading(false);
       } catch (error) {
         console.error("Error fetching filament:", error);
@@ -79,36 +98,44 @@ const FilamentInfo = () => {
       }
     };
 
-    // Check if user is admin
     const checkAdminStatus = async () => {
-      const token = localStorage.getItem('token');
-      
+      const token = localStorage.getItem("token");
       if (token) {
         try {
-          
-          const tokenData = JSON.parse(atob(token.split('.')[1]));
-          
-          
+          const tokenData = JSON.parse(atob(token.split(".")[1]));
           if (!tokenData.role) {
-            const userResponse = await axios.get('http://localhost:5000/api/profile', {
+            const userResponse = await axios.get("http://localhost:5000/api/profile", {
               headers: {
-                Authorization: `Bearer ${token}`
-              }
+                Authorization: `Bearer ${token}`,
+              },
             });
-            
-            setIsAdmin(userResponse.data.user.role === 'admin');
+            setIsAdmin(userResponse.data.user.role === "admin");
           } else {
-            setIsAdmin(tokenData.role === 'admin');
+            setIsAdmin(tokenData.role === "admin");
           }
         } catch (error) {
           console.error("Error checking admin status:", error);
         }
       }
     };
-  
+
+    const checkIfSaved = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await axios.get("http://localhost:5000/api/users/saved-filaments", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const savedIds = res.data.map((f) => f._id);
+        setIsSaved(savedIds.includes(id));
+      } catch (err) {
+        console.error("Error checking saved status", err);
+      }
+    };
+
     fetchFilament();
     checkAdminStatus();
-  }, [id]);  
+    checkIfSaved();
+  }, [id]);
 
   if (loading) return <p className="loading-message">Loading filament information...</p>;
   if (error) return <p className="error-message">{error}</p>;
@@ -121,6 +148,17 @@ const FilamentInfo = () => {
         <div className="filament-image-container">
           <img src={filament.image} alt={filament.name} className="filament-detail-image" />
         </div>
+        <FaHeart
+          onClick={toggleSave}
+          style={{
+            cursor: "pointer",
+            color: isSaved ? "red" : "white",
+            stroke: "black",
+            strokeWidth: 25,
+          }}
+          title={isSaved ? "Remove from favorites" : "Add to favorites"}
+          size={24}
+        />
       </div>
 
       <div className="filament-details">
@@ -136,11 +174,7 @@ const FilamentInfo = () => {
             </tr>
             <tr>
               <th>Available Colors</th>
-              <td>
-                {filament.available_colours && filament.available_colours.length > 0
-                  ? filament.available_colours.join(", ")
-                  : "N/A"}
-              </td>
+              <td>{filament.available_colours?.join(", ") || "N/A"}</td>
             </tr>
             <tr>
               <th>Printing Temperature</th>
@@ -152,29 +186,29 @@ const FilamentInfo = () => {
             </tr>
             <tr>
               <th>Purchase Here</th>
-              <td><a 
-      href={filament.purchase_from}
-      target="_blank" 
-      rel="noopener noreferrer">
-        {filament.purchase_from}</a> </td>
+              <td>
+                <a
+                  href={filament.purchase_from}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {filament.purchase_from}
+                </a>
+              </td>
             </tr>
-            
           </tbody>
         </table>
       </div>
 
       <div className="filament-actions">
-      <div className="filament-reviews">
-  <h2>Customer Reviews</h2>
+        <div className="filament-reviews">
+          <h2>Customer Reviews</h2>
+          <div>
+            <strong>Average Rating:</strong> <StarRating rating={Math.round(averageRating)} />
+            <p>{averageRating} out of 5</p>
+          </div>
 
-  {/* Display average rating */}
-  <div>
-    <strong>Average Rating:</strong> <StarRating rating={Math.round(averageRating)} />
-    <p>{averageRating} out of 5</p>
-  </div>
-
-  {/* List of existing reviews */}
-  {reviews.length > 0 ? (
+          {reviews.length > 0 ? (
             <ul className="review-list">
               {reviews.map((review, index) => (
                 <li key={index} className="review-item">
@@ -182,10 +216,9 @@ const FilamentInfo = () => {
                     <StarRating rating={review.rating} />
                     <p>{review.review}</p>
                   </div>
-                  {/* Only show delete button if user is admin */}
                   {isAdmin && (
-                    <button 
-                      className="delete-review-button" 
+                    <button
+                      className="delete-review-button"
                       onClick={() => handleDeleteReview(review._id, index)}
                     >
                       Delete
@@ -198,9 +231,9 @@ const FilamentInfo = () => {
             <p>No reviews yet. Be the first to review this filament!</p>
           )}
 
-  {/* Review submission form */}
-  <ReviewForm filamentId={id} onSubmit={handleNewReview} />
-</div>        
+          <ReviewForm filamentId={id} onSubmit={handleNewReview} />
+        </div>
+
         <button className="back-button" onClick={() => window.history.back()}>
           Back
         </button>
@@ -210,4 +243,3 @@ const FilamentInfo = () => {
 };
 
 export default FilamentInfo;
-

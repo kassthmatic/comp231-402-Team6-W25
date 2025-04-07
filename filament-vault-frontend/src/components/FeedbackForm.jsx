@@ -14,7 +14,7 @@ const FeedbackForm = () => {
     if (!issue.trim() && !message.trim()) return;
 
     try {
-      await axios.post('/api/feedback', {
+    await axios.post('http://localhost:5000/api/feedback', {
         feedback: `EMAIL: ${email || 'N/A'}\nISSUE: ${issue}\nFEEDBACK: ${message}`
       }, {
         headers: { Authorization: `Bearer ${token}` }
@@ -64,10 +64,7 @@ const FeedbackForm = () => {
 
       {status && <p className="feedback-status">{status}</p>}
 
-      <div className="contact-info">
-        <h4>Contact Information:</h4>
-        <p>Support Email: filamentvault@gmail.com</p>
-      </div>
+      
     </div>
   );
 };

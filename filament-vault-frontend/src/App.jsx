@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';
 import axios from "axios";
 import About from './pages/About';
+import Dashboard from './pages/Dashboard'
 import Help from './pages/Help'
 import Home from "./components/Home";
 import FilamentInfo from "./components/FilamentInfo";
@@ -40,9 +41,12 @@ function App() {
             </a>
           </div>
           <ul>
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/about">About</Link></li>
-          <li><Link to="/help">Contact</Link></li>
+            <li><Link to="/">Home</Link></li>
+            <li><Link to="/about">About</Link></li>
+            <li><Link to="/help">Contact</Link></li>
+            {isLoggedIn && (
+              <li><Link to="/dashboard">Dashboard</Link></li>
+            )}
           </ul>
 
           {/* Login/Register Buttons */}
@@ -78,6 +82,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/compare" element={<Compare />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
         </div>
       </div>

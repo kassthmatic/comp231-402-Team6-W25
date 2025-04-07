@@ -6,7 +6,6 @@ const FilamentCard = ({ filament }) => {
   const [isSaved, setIsSaved] = useState(false);
   const token = localStorage.getItem('token');
 
-  // Check if filament is already saved
   useEffect(() => {
     const checkIfSaved = async () => {
       try {
@@ -21,9 +20,8 @@ const FilamentCard = ({ filament }) => {
     };
 
     if (token) checkIfSaved();
-  }, [filament._id]); // run once when this component loads
+  }, [filament._id]);
 
-  // Toggle save/remove
   const toggleSave = async () => {
     try {
       if (!token) return;
@@ -32,32 +30,45 @@ const FilamentCard = ({ filament }) => {
         await axios.delete(`/api/users/unsave-filament/${filament._id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
-        setIsSaved(false);
       } else {
         await axios.post(`/api/users/save-filament/${filament._id}`, {}, {
           headers: { Authorization: `Bearer ${token}` }
         });
-        setIsSaved(true);
       }
+
+      // Toggle saved status
+      setIsSaved(!isSaved);
     } catch (err) {
-      console.error('Error saving filament:', err);
+      console.error('Error toggling save state:', err);
     }
   };
 
   return (
     <div className="filament-card">
-      <h3>{filament.name}</h3>
-      <p>{filament.material}</p>
+      <a href={`/filament/${filament._id}`} className="filament-link">
+        <img 
+          src={filament.image}
+          alt={filament.name}
+          className="filament-image"
+          style={{ width: '200px', borderRadius: '5px' }}
+        />
+        <h3>{filament.name}</h3>
+        <p>Brand: {filament.brand}</p>
+        <p>Material: {filament.material}</p>
+        <p>Rating: {"⭐".repeat(Math.round(filament.rating))}</p>
+      </a>
+
       <FaHeart
         onClick={toggleSave}
         style={{
           cursor: 'pointer',
           color: isSaved ? 'red' : 'white',
           stroke: 'black',
-          strokeWidth: 25
+          strokeWidth: 25,
+          marginTop: '10px'
         }}
-        title={isSaved ? 'Remove from favorites' : 'Add to favorites'}
         size={24}
+        title={isSaved ? "Unsave" : "Save"}
       />
     </div>
   );

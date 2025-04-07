@@ -31,8 +31,9 @@ const Login = () => {
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem('token', data.token); // Store token
-        navigate('/'); // Redirect to home page after login
+        localStorage.setItem('token', data.token);         // Store token
+        localStorage.setItem('username', username);        // Save username
+        navigate('/');                                     // Redirect to home
       } else {
         setError(data.error || 'Login failed. Please try again.');
       }

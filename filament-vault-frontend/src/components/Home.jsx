@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import '../index.css';
-import logo from '../assets/FilamentVaultLogo.jpg';
+import "../index.css";
+import logo from "../assets/FilamentVaultLogo.jpg";
 import MaterialFilter from "./MaterialFilter";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import FilamentCard from "./FilamentCard";
 
 const Home = () => {
   const [topRatedFilaments, setTopRatedFilaments] = useState([]);
@@ -11,7 +12,6 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch top-rated filaments
     axios
       .get("http://localhost:5000/api/filaments/top-rated")
       .then((response) => {
@@ -21,7 +21,6 @@ const Home = () => {
         console.error("Error fetching top-rated filaments:", error);
       });
 
-    // Fetch recently added filaments
     axios
       .get("http://localhost:5000/api/filaments/recently-added")
       .then((response) => {
@@ -38,37 +37,19 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      {/* Logo */}
       <div className="logo-container">
-          <img src={logo} alt="Filament Vault Logo" className="logo" />
+        <img src={logo} alt="Filament Vault Logo" className="logo" />
       </div>
 
       <MaterialFilter />
 
-      {/* Main Content */}
       <div className="main-content">
         <section className="featured-filaments">
-          {/* Recently Added Section */}
           <h2 className="title">Recently Added Filaments</h2>
           <div className="filament-list">
             {recentlyAddedFilaments.length > 0 ? (
               recentlyAddedFilaments.map((filament) => (
-                <div key={filament._id} className="filament-card">
-                  <a href={`/filament/${filament._id}`} className="filament-link">
-                    <img 
-                      src={filament.image} 
-                      alt={filament.name} 
-                      style={{ width: "200px", height: "auto", borderRadius: "5px" }}
-                      className="filament-image"
-                    />
-                    <h3 className="filament-name">{filament.name}</h3>
-                    <p className="filament-details">Brand: {filament.brand}</p>
-                    <p className="filament-details">Material: {filament.material}</p>
-                    <p className="filament-rating">
-                      Rating: {"⭐".repeat(Math.round(filament.rating))}
-                    </p>
-                  </a>
-                </div>
+                <FilamentCard key={filament._id} filament={filament} />
               ))
             ) : (
               <p className="no-filaments">No recently added filaments found.</p>
@@ -76,28 +57,12 @@ const Home = () => {
           </div>
         </section>
 
-        {/* Top-Rated Filaments Section */}
         <section className="featured-filaments">
           <h2 className="title">Top-Rated Filaments</h2>
           <div className="filament-list">
             {topRatedFilaments.length > 0 ? (
               topRatedFilaments.map((filament) => (
-                <div key={filament._id} className="filament-card">
-                  <a href={`/filament/${filament._id}`} className="filament-link">
-                    <img 
-                      src={filament.image} 
-                      alt={filament.name} 
-                      style={{ width: "200px", height: "auto", borderRadius: "5px" }}
-                      className="filament-image"
-                    />
-                    <h3 className="filament-name">{filament.name}</h3>
-                    <p className="filament-details">Brand: {filament.brand}</p>
-                    <p className="filament-details">Material: {filament.material}</p>
-                    <p className="filament-rating">
-                      Rating: {"⭐".repeat(Math.round(filament.rating))}
-                    </p>
-                  </a>
-                </div>
+                <FilamentCard key={filament._id} filament={filament} />
               ))
             ) : (
               <p className="no-filaments">No top-rated filaments found.</p>
@@ -105,23 +70,21 @@ const Home = () => {
           </div>
         </section>
 
-        {/* FAQ Button */}
         <div className="faq-button">
           <Link to="/faq">
             <button className="faq-btn">FAQ</button>
           </Link>
         </div>
 
-        {/* Help/Leave Feedback Button */}
         <div className="feedback-button">
-        <Link to="/help">
-          <button className="feedback-btn">Help/Leave Feedback</button>
-        </Link>
+          <Link to="/help">
+            <button className="feedback-btn">Help/Leave Feedback</button>
+          </Link>
         </div>
 
-        {/* Footer */}
         <footer className="footer">
-          <p>Footer Content Here</p>
+          <p>Built by Group 6 // Centennial College | COMP231 SEC402</p>
+          <p>&copy; {new Date().getFullYear()} Filament Vault | Powered by MongoDB, Express, React, and Node</p>
         </footer>
       </div>
     </div>

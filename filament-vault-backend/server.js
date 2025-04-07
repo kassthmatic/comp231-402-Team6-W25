@@ -1,4 +1,4 @@
-// require('dotenv').config();
+require('dotenv').config();
 // console.log('JWT_SECRET:', process.env.JWT_SECRET); //to see any errors with JWT 
 
 const JWT_SECRET = 'supersecret_dont_share';
@@ -6,6 +6,7 @@ const JWT_SECRET = 'supersecret_dont_share';
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const feedbackRouter = require('./routes/feedback');
 const filamentsRouter = require("./routes/filaments");
 const authRouter = require("./routes/auth"); 
 const profileRouter = require("./routes/profile");
@@ -15,6 +16,7 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(cors());
+app.use('/api/feedback', feedbackRouter);
 
 // Connect to MongoDB
 mongoose
@@ -26,6 +28,7 @@ mongoose
 app.use("/api/filaments", filamentsRouter);  // This should be registered correctly
 app.use("/api/auth", authRouter);
 app.use("/api/profile", profileRouter);
+app.use("/api/feedback", feedbackRouter);
 
 // Start the server
 const PORT = process.env.PORT || 5000;
