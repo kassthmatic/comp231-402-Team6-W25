@@ -10,7 +10,7 @@ const FilamentSchema = new mongoose.Schema(
     printing_temperature: { type: String },
     enclosure_required: { type: String },
     created_at: { type: Date, default: Date.now },
-    purchase_from: {type: string},
+    purchase_from: {type: String},
   },
   { collection: "Filament Info" } 
 );
