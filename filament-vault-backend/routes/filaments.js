@@ -94,7 +94,8 @@ router.post('/:id/reviews', verifyToken, async (req, res) => {
     const newReview = {
       review,
       rating,
-      user: req.user.userId, 
+      user: req.user._id // FIXED HERE: if not replace with below
+      //user: req.user.userId, 
     };
 
     filament.reviews.push(newReview);
