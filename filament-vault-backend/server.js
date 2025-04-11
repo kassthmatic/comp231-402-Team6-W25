@@ -1,5 +1,4 @@
 require('dotenv').config();
-// console.log('JWT_SECRET:', process.env.JWT_SECRET); //to see any errors with JWT 
 
 const JWT_SECRET = 'supersecret_dont_share';
 
@@ -20,17 +19,21 @@ app.use('/api/feedback', feedbackRouter);
 
 // Connect to MongoDB
 mongoose
-  .connect("mongodb+srv://FilamentVault:Mi5thDXF0Z07PgzK@filamentvaultdb.pkgea.mongodb.net/FilamentVault?retryWrites=true&w=majority&appName=FilamentVaultDB")
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))
   .catch(err => console.error("MongoDB Connection Error:", err));
 
 // Routes
-app.use("/api/filaments", filamentsRouter);  // This should be registered correctly
+app.use("/api/filaments", filamentsRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/profile", profileRouter);
 app.use("/api/feedback", feedbackRouter);
 
-// Start the server
+// Start the server — only if not in test mode
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}
 
+//for Supertest to use in Jest
+module.exports = app;
