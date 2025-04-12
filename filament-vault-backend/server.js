@@ -1,7 +1,5 @@
 require('dotenv').config();
 
-const JWT_SECRET = 'supersecret_dont_share';
-
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -25,15 +23,11 @@ mongoose
   .catch(err => console.error("MongoDB Connection Error:", err));
 
 // Routes
-<<<<<<< HEAD
-app.use("/api/filaments", filamentsRouter); 
-=======
 app.use("/api/filaments", filamentsRouter);
->>>>>>> a1a7c86a76bf24bace1c0951af21c3c43eec20ff
 app.use("/api/auth", authRouter);
 app.use("/api/profile", profileRouter);
 app.use("/api/feedback", feedbackRouter);
-app.use('/api/users', userRoutes);
+app.use("/api/users", userRoutes);
 
 
 // Start the server — only if not in test mode
