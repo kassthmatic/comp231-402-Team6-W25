@@ -9,10 +9,12 @@ const FilamentCard = ({ filament }) => {
   useEffect(() => {
     const checkIfSaved = async () => {
       try {
-        const res = await axios.get('/api/users/saved-filaments', {
+        const res = await axios.get('http://localhost:5000/api/users/saved-filaments', {
           headers: { Authorization: `Bearer ${token}` }
         });
-        const savedIds = res.data.map(f => f._id);
+    
+        const saved = Array.isArray(res.data) ? res.data : []; 
+        const savedIds = saved.map(f => f._id);
         setIsSaved(savedIds.includes(filament._id));
       } catch (err) {
         console.error('Could not load saved filaments', err);
@@ -27,11 +29,11 @@ const FilamentCard = ({ filament }) => {
       if (!token) return;
 
       if (isSaved) {
-        await axios.delete(`/api/users/unsave-filament/${filament._id}`, {
+        await axios.delete(`http://localhost:5000/api/users/unsave-filament/${filament._id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
       } else {
-        await axios.post(`/api/users/save-filament/${filament._id}`, {}, {
+        await axios.post(`http://localhost:5000/api/users/save-filament/${filament._id}`, {}, {
           headers: { Authorization: `Bearer ${token}` }
         });
       }

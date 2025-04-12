@@ -1,3 +1,9 @@
+const express = require('express');
+const router = express.Router();
+const authenticateUser = require('../middleware/authMiddleware');
+const User = require('../models/User');
+const Filament = require('../models/Filament'); 
+
 router.post('/save-filament/:filamentId', authenticateUser, async (req, res) => {
     try {
       const user = await User.findById(req.user.id);
@@ -27,3 +33,14 @@ router.post('/save-filament/:filamentId', authenticateUser, async (req, res) => 
       res.status(500).json({ error: 'Error removing filament' });
     }
   });
+
+  router.get('/saved-filaments', authenticateUser, async (req, res) => {
+    try {
+      const user = await User.findById(req.user._id).populate('savedFilaments');
+      res.json(user.savedFilaments);
+    } catch (err) {
+      res.status(500).json({ error: 'Failed to load saved filaments' });
+    }
+  });
+
+  module.exports = router;

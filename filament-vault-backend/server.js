@@ -10,6 +10,7 @@ const feedbackRouter = require('./routes/feedback');
 const filamentsRouter = require("./routes/filaments");
 const authRouter = require("./routes/auth"); 
 const profileRouter = require("./routes/profile");
+const userRoutes = require('./routes/users');
 
 const app = express();
 
@@ -25,10 +26,12 @@ mongoose
   .catch(err => console.error("MongoDB Connection Error:", err));
 
 // Routes
-app.use("/api/filaments", filamentsRouter);  // This should be registered correctly
+app.use("/api/filaments", filamentsRouter); 
 app.use("/api/auth", authRouter);
 app.use("/api/profile", profileRouter);
 app.use("/api/feedback", feedbackRouter);
+app.use('/api/users', userRoutes);
+
 
 // Start the server
 const PORT = process.env.PORT || 5000;

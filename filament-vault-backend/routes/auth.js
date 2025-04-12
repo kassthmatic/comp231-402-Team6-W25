@@ -10,12 +10,17 @@ function isStrongPassword(password) {
 }
 
 // Hardcoded JWT Secret
-const JWT_SECRET = 'supersecret_dont_share';
+const JWT_SECRET = process.env.JWT_SECRET;
 
 router.post('/register', async (req, res) => {
   const { username, email, password } = req.body;
   if (!isStrongPassword(password)) {
     return res.status(400).json({ error: "Password must be at least 8 characters." });
+  }
+
+  const existingUsername = await User.findOne({ username });
+  if (existingUsername) {
+  return res.status(400).json({ message: 'Username already taken' });
   }
 
 
@@ -38,12 +43,11 @@ router.post('/register', async (req, res) => {
     
 
     // JWT token so the user stays logged in after registering or logging in
-    //Updated register route to match login route
     const token = jwt.sign(
       { _id: newUser._id, username: newUser.username },
       JWT_SECRET,
       { expiresIn: '1h' }
-    );    
+    );
 
     res.status(201).json({ message: 'User registered successfully!', token });
   } catch (error) {
