@@ -4,11 +4,13 @@ const authenticateUser = require('../middleware/authMiddleware');
 const User = require('../models/User');
 const Filament = require('../models/Filament'); 
 
+// Save a filament to the logged-in user's favorites (savedFilaments array)
 router.post('/save-filament/:filamentId', authenticateUser, async (req, res) => {
     try {
       const user = await User.findById(req.user.id);
       const filamentId = req.params.filamentId;
-  
+      
+      // Only add the filament if it's not already in the saved list
       if (!user.savedFilaments.includes(filamentId)) {
         user.savedFilaments.push(filamentId);
         await user.save();
@@ -20,6 +22,7 @@ router.post('/save-filament/:filamentId', authenticateUser, async (req, res) => 
     }
   });
 
+  // Remove a filament from the user's favorites
   router.delete('/unsave-filament/:filamentId', authenticateUser, async (req, res) => {
     try {
       const user = await User.findById(req.user.id);
@@ -34,6 +37,7 @@ router.post('/save-filament/:filamentId', authenticateUser, async (req, res) => 
     }
   });
 
+  // Retrieve all filaments the user has favorited
   router.get('/saved-filaments', authenticateUser, async (req, res) => {
     try {
       const user = await User.findById(req.user._id).populate('savedFilaments');

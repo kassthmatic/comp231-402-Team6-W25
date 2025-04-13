@@ -1,3 +1,9 @@
+/**
+ * Form component that allows logged-in users to submit a rating and review for a filament.
+ * Validates input and sends POST requests to the backend to save the review to the filament document.
+ * Includes dynamic star rating selection and optional comment input field.
+ */
+
 import React, { useState } from 'react';
 import StarRating from './StarRating'; 
 

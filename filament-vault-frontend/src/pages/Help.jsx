@@ -1,3 +1,8 @@
+/**
+ * Help page component that renders the feedback form.
+ * Users can report issues or ask questions about the platform.
+ */
+
 import FeedbackForm from '../components/FeedbackForm';
 import React from 'react';
 

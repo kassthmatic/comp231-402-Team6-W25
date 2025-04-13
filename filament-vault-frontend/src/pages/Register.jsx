@@ -1,3 +1,8 @@
+/**
+ * Auth component that handles user register functionality.
+ * Sends user credentials to backend and stores JWT upon success.
+ */
+
 import React, { useState } from 'react';
 
 const Register = () => {

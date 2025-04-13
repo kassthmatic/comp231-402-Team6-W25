@@ -1,3 +1,8 @@
+/**
+ * Displays selected filaments side by side for comparison.
+ * Compares material, temperature, brand, and color options.
+ */
+
 import React, { useEffect, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import axios from "axios";

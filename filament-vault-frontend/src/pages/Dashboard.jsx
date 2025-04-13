@@ -1,3 +1,8 @@
+/**
+ * Dashboard component that greets the user and shows their saved filaments.
+ * Includes buttons for navigating to other features (edit profile, account info).
+ */
+
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../index.css";

@@ -1,3 +1,8 @@
+/**
+ * Search component for querying filaments by name.
+ * Filters results and updates the filament display dynamically.
+ */
+
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";

@@ -1,13 +1,17 @@
+/**
+ * Middleware to verify JWT tokens and attach user to the request object.
+ */
+
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
-// JWT Secret (you can store this in .env)
+// JWT Secret
 const JWT_SECRET = process.env.JWT_SECRET;
 
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
 
-  console.log('Authorization header:', authorization); // <--- Add this
+  console.log('Authorization header:', authorization); 
 
   if (!authorization) {
     return res.status(401).json({ error: 'You must log in' });
@@ -17,11 +21,11 @@ module.exports = (req, res, next) => {
 
   jwt.verify(token, JWT_SECRET, (err, payload) => {
     if (err) {
-      console.log('JWT verify error:', err); // Optional: log error
+      console.log('JWT verify error:', err); 
       return res.status(401).json({ error: 'You must log in' });
     }
 
-    console.log('Decoded payload:', payload); // <--- Add this
+    console.log('Decoded payload:', payload); 
 
     const { _id } = payload;
 

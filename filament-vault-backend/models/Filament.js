@@ -1,3 +1,7 @@
+/**
+ * Mongoose schema definition for Filament documents.
+ */
+
 const mongoose = require("mongoose");
 
 const FilamentSchema = new mongoose.Schema(
@@ -10,6 +14,7 @@ const FilamentSchema = new mongoose.Schema(
     printing_temperature: { type: String },
     enclosure_required: { type: String },
     purchase_from: { type: String },
+    // Embedded reviews array, includes user reference and rating
     reviews: [
       {
         review: { type: String, required: true },

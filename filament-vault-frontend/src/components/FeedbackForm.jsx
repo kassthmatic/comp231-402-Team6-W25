@@ -1,13 +1,23 @@
+/**
+ * Form component for submitting feedback via email.
+ * Sends feedback using axios to the backend’s /api/feedback endpoint.
+ */
+
 import React, { useState } from 'react';
 import axios from 'axios';
 
 const FeedbackForm = () => {
+  // Tracks user's optional email input
   const [email, setEmail] = useState('');
+  // Tracks issue title (if applicable)
   const [issue, setIssue] = useState('');
+  // Tracks detailed feedback message
   const [message, setMessage] = useState('');
+  // Displays status message after submission
   const [status, setStatus] = useState('');
   const token = localStorage.getItem('token');
 
+  // Handles feedback form submission and sends data to the backend
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -30,6 +40,7 @@ const FeedbackForm = () => {
     }
   };
 
+  // Feedback form UI - collects user feedback and issue description
   return (
     <div className="feedback-form">
       <h2>Help/Site Feedback Form</h2>

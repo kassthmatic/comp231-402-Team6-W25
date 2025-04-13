@@ -1,3 +1,9 @@
+/** 
+ * Component that displays all filaments saved by the user.
+ * Renders filament cards with an option to remove items from favorites.
+ * Requires user authentication and communicates with the backend via token-protected routes. 
+ */
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -7,7 +13,7 @@ const SavedFilaments = () => {
   useEffect(() => {
     const fetchSaved = async () => {
       try {
-        const token = localStorage.getItem('token'); // adjust if you're using context/auth
+        const token = localStorage.getItem('token'); 
         const res = await axios.get('/api/users/saved-filaments', {
           headers: {
             Authorization: `Bearer ${token}`

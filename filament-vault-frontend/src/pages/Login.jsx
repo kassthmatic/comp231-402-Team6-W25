@@ -1,3 +1,8 @@
+/**
+ * Auth component that handles user login functionality.
+ * Sends user credentials to backend and stores JWT upon success.
+ */
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 

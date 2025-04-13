@@ -1,3 +1,8 @@
+/**
+ * Filter component that allows users to sort filaments by material type.
+ * Sends selected material to backend and updates filament results.
+ */
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 

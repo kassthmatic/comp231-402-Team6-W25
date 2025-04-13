@@ -1,4 +1,9 @@
-require('dotenv').config();
+/**
+ * Entry point for the Express backend server.
+ * Handles middleware setup and connects to MongoDB.
+ */
+
+require('dotenv').config(); // Load environment variables
 
 const express = require("express");
 const mongoose = require("mongoose");
@@ -16,7 +21,7 @@ app.use(express.json());
 app.use(cors());
 app.use('/api/feedback', feedbackRouter);
 
-// Connect to MongoDB
+// Connect to MongoDB using URI from environment variables
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))

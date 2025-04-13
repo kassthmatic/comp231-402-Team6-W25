@@ -1,3 +1,8 @@
+/**
+ * Main application component that configures routing and navigation.
+ * Displays navbar, handles login/logout buttons, and renders the main content routes.
+ */
+
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';

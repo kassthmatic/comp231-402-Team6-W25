@@ -1,3 +1,8 @@
+/**
+ * Displays detailed information for a selected filament.
+ * Allows users to view brand, material, ratings, and submit reviews.
+ */
+
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";

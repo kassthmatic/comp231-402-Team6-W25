@@ -1,3 +1,8 @@
+/**
+ * Reusable component for selecting and displaying star-based ratings.
+ * Used in both filament review submission and review displays.
+ * Supports hover-based highlighting and visual feedback for selected ratings.
+ */
 import React, { useState } from 'react';
 
 const StarRating = ({ rating, onRatingChange }) => {

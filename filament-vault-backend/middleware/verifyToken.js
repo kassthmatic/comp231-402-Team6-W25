@@ -1,3 +1,7 @@
+/**
+ * Middleware to verify JWT for protected routes.
+ */
+
 const jwt = require('jsonwebtoken');
 
 // Hardcoded JWT Secret

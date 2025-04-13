@@ -9,7 +9,7 @@ function isStrongPassword(password) {
   return password.length >= 8;
 }
 
-// Hardcoded JWT Secret
+// JWT Secret
 const JWT_SECRET = process.env.JWT_SECRET;
 
 router.post('/register', async (req, res) => {

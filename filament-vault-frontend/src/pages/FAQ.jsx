@@ -1,3 +1,8 @@
+/**
+ * FAQ page component that renders common questions.
+ * Users can look up FAQs about the platform.
+ */
+
 import React, { useEffect } from 'react';
 
 const faqs = [

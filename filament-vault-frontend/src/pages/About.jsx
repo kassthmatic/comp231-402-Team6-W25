@@ -1,3 +1,8 @@
+/** 
+ * Displays a brief overview of the Filament Vault platform and its purpose.
+ * Provides users with background information on the app’s features and goals.
+ */
+
 import React from 'react';
 
 const About = () => {

@@ -1,3 +1,8 @@
+/**
+ * Home page component that displays top-rated and recently added filaments.
+ * Also renders the search bar, MaterialFilter, and navigation buttons to other pages.
+ */
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../index.css";

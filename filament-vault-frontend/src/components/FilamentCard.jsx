@@ -1,3 +1,8 @@
+/**
+ * Reusable component to display individual filament details.
+ * Includes functionality for saving/removing favorites using a heart icon.
+ */
+
 import { useState, useEffect } from 'react';
 import { FaHeart } from 'react-icons/fa';
 import axios from 'axios';
